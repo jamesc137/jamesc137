@@ -1,0 +1,58 @@
+/* Animated Gradient */
+.animated-gradient {
+  background: linear-gradient(-45deg, #FF9355, #FC5081, #7162F3, #43DBE7);
+  background-size: 400% 400%;
+  -webkit-animation: Gradient 15s ease infinite;
+  -moz-animation: Gradient 15s ease infinite;
+  animation: Gradient 15s ease infinite;
+}
+
+/* Orange BG Gradient */
+.gradient-bg-orange {
+  background: var(--orange); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, var(--pink), var(--orange)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, var(--pink), var(--orange)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, var(--pink), var(--orange)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, var(--pink), var(--orange)); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--pink), endColorstr=var(--orange),GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+/* Green BG Gradient */
+.gradient-bg-blue {
+  background: var(--purple); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, var(--purple), var(--cyan)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, var(--purple), var(--cyan)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, var(--purple), var(--cyan)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, var(--purple), var(--cyan)); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--purple), endColorstr=var(--cyan),GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+/* Purple BG Gradient */
+.gradient-bg-purple {
+  background: var(--purple); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left bottom, var(--purple), var(--pink)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(top right, var(--purple), var(--pink)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(top right, var(--purple), var(--pink)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to top right, var(--purple), var(--pink)); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--purple), endColorstr=var(--pink),GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+/* Light BG Gradient */
+.gradient-bg-light {
+  background: var(--white); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, var(--white), var(--light-gray)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, var(--white), var(--light-gray)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, var(--white), var(--light-gray)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, var(--white), var(--light-gray)); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--white), endColorstr=var(--light-gray),GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+/* Dark BG Gradient */
+.gradient-bg-dark {
+  background: var(--dark-gray); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, var(--dark-gray), var(--dark-blue)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, var(--dark-gray), var(--dark-blue)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, var(--dark-gray), var(--dark-blue)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, var(--dark-gray), var(--dark-blue)); /* Standard syntax */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=var(--dark-gray), endColorstr=var(--dark-blue),GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
