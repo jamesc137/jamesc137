@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>James Calhoun</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180553334-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-180553334-1');
+    </script>
+    <!-- OGP -->
+    <meta property="og:title" content="James Calhoun - Entrepreneur"/>
+    <meta property="og:description" content="James Calhoun - Entrepreneur"/>
+    <meta property="og:url" content="https://jamescalhoun.co" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fav Icon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <!-- Site CSS -->
+    <link href="public/css/site.css" rel="stylesheet" type="text/css">
+    <link href="public/css/components.css" rel="stylesheet" type="text/css">
+    <link href="public/css/gradients.css" rel="stylesheet" type="text/css">
+    <link href="public/css/animations.css" rel="stylesheet" type="text/css">
+    <link href="public/css/lavalamp.css" rel="stylesheet" type="text/css">
+    <!-- JS -->
+    <script type="text/javascript" src="public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="public/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  </head>
+  <body>
+    <div class="container">
+
+      <!-- Open AI -->
+      <h1 class="center">Code Examples</h1>
+      <h2>⚛️ Open AI</h2>
+      <p>Welcome OpenAI team member! The following page will walk you through some code I've written that is currently live in production.</p>
+
+      <h3>🏙️ BitNations</h3>
+      <p>BitNations is a MMO Nation Simulation game written in Ruby on Rails and uses Postgres.</p>
+      <p>The game is run by a "Game Manager" class:</p>
+
+
+      <pre class="prettyprint lang-rb">
+        class GameManager < ApplicationRecord
+
+          private
+        
+          def self.progress(nation)
+            NationIssue.generate_new_nation_issues(nation)
+            GameManager.reward_influence(nation)
+            GameManager.update_turns(nation)
+            GameManager.reset_turns(nation)
+          end
+        .
+        .
+        .
+        end
+      </pre>
+
+    
+
+
+
+      <!-- 1984 Macintosh -->
+      <!-- <h2 class="center">1984 Macintosh</h2>
+      <h3 class="center">Resotration Project</h3>
+      <p>I was very lucky with this machine. I bought it on eBay for $50. It was in non-working condition and it was mislabeled as a 1985. I had a gut feeling it was a 1984 that was upgraded from a 128k to a 512k by an Apple Certified Technician back in 1985, and it turned out I was correct. Once it arrived, I looked at the serial number and found it was manufactured in June of 1984. After dismantling, cleaning and repairing it I had the machine running with Macintosh System 4.1. It is pictured here with the 'AirMacs'.</p>
+      <div class="card">
+        <img src="public/images/james-calhoun-airmacs-mac.png" alt="" style="width:100%;">
+      </div> -->
+
+      <!-- MacPi -->
+      <!-- <h2 class="center">MacPi</h2>
+      <h3 class="center">Build Project</h3>
+      <p>This is a 1988 Macintosh Plus housing with a M0001 face, an Akko 3068 Mechanical Keybaord with custom Apple Key Caps for command and option keys. Inside lives a Rasberry Pi rigged to an LCD monitor and 3D printed components to fill the floppy drive slot, USB ports front and back, and curvature in the housing for the original CRT monitor. An Apple II mouse is converted to bluetooth which enables the user to easily control the machine while it runs a MiniVmac emulation of Mac System 7.1.</p>
+      <div class="card">
+        <img src="public/images/james-calhoun-mac-pi.jpeg" alt="" style="width:100%;"></video>
+      </div> -->
+
+      <!-- SmarTender -->
+      <!-- <h2 class="center">SmarTender</h2>
+      <h3 class="center">Build Project</h3>
+      <p>This was a fun project because it meant I no longer needed to man the bar during our Christmas festivities. The code to manage the switchboard and pumps is written in Python and the touchscreen interface is written in a Javascript library. Users input the ingredients they wish to use (up to six) and SmarTender generates a list of cocktails that the user can select from. The user then selects their cocktail and whether to make it a single or a double.</p>
+      <div class="card">
+        <img src="public/images/james-calhoun-smartender.jpg" alt="" style="width:100%;">
+      </div> -->
+
+      
+    </div>
+  </body>
+</html>
