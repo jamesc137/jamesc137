@@ -35,59 +35,209 @@
       <!-- Open AI -->
       <h1 class="center">Code Examples</h1>
       <h2>⚛️ Open AI</h2>
-      <p>Welcome OpenAI team member! The following page will walk you through some code I've written that is currently live in production.</p>
+      <p>Welcome OpenAI team member! The following page will walk you through some code I've written for BitNations.</p>
+
+      
+      <ol>
+        <li><a href="#game_manager">Game Manager & Nation Issues</a></li>
+        <li><a href="#gdp">GDP</a></li>
+        <li><a href="#war">Multiplayer Combat (War)</a></li>
+      </ol>
 
       <h3>🏙️ BitNations</h3>
-      <p>BitNations is a MMO Nation Simulation game written in Ruby on Rails and uses Postgres.</p>
-      <p>The game is run by a "Game Manager" class:</p>
 
+      <p>BitNations is a multiplayer, online nation sim written in Ruby on Rails using Postgres databases.</p>
+      <p>The general game play is straight forward. The user selects the "Next" button from the UI. This action then triggers the 'progress' method which then progresses the user's nation one turn.</p>
+
+      <h3 class="center" id="game_manager">The Game Manager</h3>
+      
+      <p>
+        The game is run by a "Game Manager" class. In this class, we define the 'progress' method seen below.
+        When a nation is progressed one turn, A LOT of things happen. For now, let's focus on the high level things.
+      </p>
 
       <pre class="prettyprint lang-rb">
         class GameManager < ApplicationRecord
-
+          
           private
-        
+
           def self.progress(nation)
             NationIssue.generate_new_nation_issues(nation)
-            GameManager.reward_influence(nation)
-            GameManager.update_turns(nation)
-            GameManager.reset_turns(nation)
+            .
+            .
+            .
           end
-        .
-        .
-        .
         end
       </pre>
 
+      <p>With each turn, there is a chance that the nation will recieve an in-game "issue". <a href="https://bitnations.co/issues_guide" target="_blank">Issues</a>
+        are scenarios with choices that the user must decide on, the result of which impacts the user's nation in various ways. Generating these issues is done
+        in the NationIssue class:
+      </p>
+
+      <pre class="prettyprint lang-rb">
+        class NationIssue < ApplicationRecord
+
+          def self.generate_new_nation_issues(nation)
+            chance = rand(0..1)
+            return unless chance <= 0.25
+
+            approved_issues = Issue.approved
+            issues = approved_issues.in_category(nation.age)
+                                  .not_resolved_by(nation)
+                                  .ordered_by_narrative
+                                  .limit(1)
+            issues.each do |issue|
+              NationIssue.create(issue_id: issue.id, nation_id: nation.id)
+            end
+          end
+
+        end
+      </pre>
+
+      <p>Before digging into this method, let's take a tiny step back and discover why we have two classes, "Issue" and "NationIssue".</p>
+      <p>
+        One requirement for this project is to provide an Admin Dashboard where a Admin User can edit certain aspects within the game.
+        The primary reason for this is to be able to adjust game play without needing to write code and re-deploy the application. Issues are
+        one such thing that are editable by an Admin User.
+      </p>
+      <p>The <u>Issue</u> class is for Admin User and User submitted Issues. It contains the details about the issue such as the title, choices, and consequences.</p>
+      <p>The <u>NationIssue</u> class is used to reference an Issue.</p>
+
+      <pre class="prettyprint lang-rb">
+        class NationIssue < ApplicationRecord
+          before_update :resolved_issue
+        
+          belongs_to :issue
+          belongs_to :nation
+        end
+      </pre>
+
+      <p>
+        Since Issues are submitted by Users, they must first be reviewed and approved by a Moderator. Once this is done, the attribute "approved" is saved to the database as "true".
+        We can then add this scope to the Issue model so that we can easily get a list of approved issues like this:
+      </p>
+
+      <pre class="prettyprint lang-rb">
+        class Issue < ApplicationRecord
     
+          scope :approved, -> {
+            where(approved: true)
+          }
+
+        end
+      </pre>
+
+      <pre class="prettyprint lang-rb">
+        approved_issues = Issue.approved
+      </pre>
+
+      <p>
+        Next, we now need to determine what issues are to appear for this nation. As there are many <a href="https://bitnations.co/ages_guide" target="_blank">economic ages</a>
+        that nations progress through, the types of issues that arise should be relevant to the age the user is in.
+      </p>
+      <p>
+        Below, we are selecting issues from the approved_issues array in which the "category" attribue matches the nation's current economic age.
+      </p>
+      
+      <pre class="prettyprint lang-rb">
+        approved_issues.in_category(nation.age)
+      </pre>
 
 
+      <p>
+        Lastly, we want to ensure that issues a nation has already responded to, do not appear again for the same nation
+        And that if there is any narrative, issues are picked in order of the narrative they may follow.
+      </p>
 
-      <!-- 1984 Macintosh -->
-      <!-- <h2 class="center">1984 Macintosh</h2>
-      <h3 class="center">Resotration Project</h3>
-      <p>I was very lucky with this machine. I bought it on eBay for $50. It was in non-working condition and it was mislabeled as a 1985. I had a gut feeling it was a 1984 that was upgraded from a 128k to a 512k by an Apple Certified Technician back in 1985, and it turned out I was correct. Once it arrived, I looked at the serial number and found it was manufactured in June of 1984. After dismantling, cleaning and repairing it I had the machine running with Macintosh System 4.1. It is pictured here with the 'AirMacs'.</p>
-      <div class="card">
-        <img src="public/images/james-calhoun-airmacs-mac.png" alt="" style="width:100%;">
-      </div> -->
+      <pre class="prettyprint lang-rb">
+        .not_resolved_by(nation)
+        .ordered_by_narrative
+      </pre>
 
-      <!-- MacPi -->
-      <!-- <h2 class="center">MacPi</h2>
-      <h3 class="center">Build Project</h3>
-      <p>This is a 1988 Macintosh Plus housing with a M0001 face, an Akko 3068 Mechanical Keybaord with custom Apple Key Caps for command and option keys. Inside lives a Rasberry Pi rigged to an LCD monitor and 3D printed components to fill the floppy drive slot, USB ports front and back, and curvature in the housing for the original CRT monitor. An Apple II mouse is converted to bluetooth which enables the user to easily control the machine while it runs a MiniVmac emulation of Mac System 7.1.</p>
-      <div class="card">
-        <img src="public/images/james-calhoun-mac-pi.jpeg" alt="" style="width:100%;"></video>
-      </div> -->
+      <p>
+        Now we can generate the issues that match our criteria based on the array 
+      </p>
 
-      <!-- SmarTender -->
-      <!-- <h2 class="center">SmarTender</h2>
-      <h3 class="center">Build Project</h3>
-      <p>This was a fun project because it meant I no longer needed to man the bar during our Christmas festivities. The code to manage the switchboard and pumps is written in Python and the touchscreen interface is written in a Javascript library. Users input the ingredients they wish to use (up to six) and SmarTender generates a list of cocktails that the user can select from. The user then selects their cocktail and whether to make it a single or a double.</p>
-      <div class="card">
-        <img src="public/images/james-calhoun-smartender.jpg" alt="" style="width:100%;">
-      </div> -->
+      <pre class="prettyprint lang-rb">
+        issues.each do |issue|
+          NationIssue.create(issue_id: issue.id, nation_id: nation.id)
+        end
+      </pre>
+
+      <p>
+        You may be wondering why we would decide to do issues.each to create multiple issues while previously only limiting the slection of issues to one.
+        This is because based on user feedback we decided to limit issues to one at a time, however we may want to support multiple issues again in the future.
+        As well, issues is an array in which we know the max length will only be 1.
+      </p>
+
+      <h3 class="center" id="gdp">How is GDP calculated?</h3>
+
+      <p>
+        Previously, we looked at how a nation progresses and how NationIssues are randomly generated on each turn. There are many more things that occur when a Nation progresses.
+        One of those things is calculating the nation's GDP, also known as Gross Domestic Product, a standard KPI for economic performance used by governments and economists.
+      </p>
+
+      <p>First, let's look at the equation for GDP in the real world:</p>
+
+      <p>GDP = C + G + I + NX</p>
+      <p>Where...</p>
+      <ul>
+        <li>C = Consumer Spending</li>
+        <li>G = Government Spending</li>
+        <li>I = Private Investment</li>
+        <li>NX = Imports - Exports</li>
+      </ul>
 
       
+      <pre class="prettyprint lang-rb">
+        class Economy < ApplicationRecord
+          belongs_to :nation
+
+          private
+
+          def self.calculate_GDP(nation, treasury, economy, population, budget, military)
+            consumer_spending  = 0.0
+            private_investment = 0.0
+            Population.demographics.each do |key, val|
+              census = population[key]
+              income = population[key + '_income']
+              tax_rate = treasury[key + '_tax_rate'] * 0.01
+              income_after_taxes = income - (income * tax_rate)
+              unless key == 'colony_class' || key == 'commercial_class'
+                consumer_spending += (census * income_after_taxes) * rand(0.35..0.45)
+              end
+              if key == 'commercial_class'
+                private_investment += (census * income_after_taxes) * rand(0.1..0.15)
+              end
+            end
+            government_spending = budget.total + treasury.military_spending
+            import_exports = 0
+            economy.gdp = consumer_spending + 
+                          government_spending + 
+                          private_investment + 
+                          import_exports
+            economy.save
+          end
+
+        end
+      </pre>
+
+      <p>
+        Will post explanation for this soon. As the new Trade Functionality was recently added, enabling nation's to trade resources, money, and influence, the import_exports part of GDP can now be implemented,
+        but is not yet implemented which is why in the code above it is set to 0.
+      </p>
+
+
+
+
+      <h3 class="center" id="war">Multiplayer War!</h3>
+
+      <p>This section coming soon.</p>
+
+
     </div>
   </body>
 </html>
+
+
