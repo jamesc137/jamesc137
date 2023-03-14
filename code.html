@@ -41,7 +41,7 @@
       <ol>
         <li><a href="#game_manager">Game Manager & Nation Issues</a></li>
         <li><a href="#gdp">GDP</a></li>
-        <li><a href="#war">Multiplayer Combat (War)</a></li>
+        <li><a href="#military">Military</a></li>
       </ol>
 
       <h3>🏙️ BitNations</h3>
@@ -227,6 +227,10 @@
         the value of trades to keep a tally of import and exports. This will be implemented in the near future, so for now it is defaulted to 0.
       </p>
 
+      <p>
+        To understand what the Population demographics are, we can refer to the Population class where our enum demographics is defined.
+      </p>
+
       <pre class="prettyprint lang-rb">
         class Population < ApplicationRecord
           belongs_to :nation
@@ -243,7 +247,7 @@
       </pre>
 
       <p>
-        The Treasury model contains an enum of the different tax brackets. The tax brackets corresponsd to the Population demographics in the key names
+        The Treasury model contains an enum of the different tax brackets. The tax brackets correspond to the Population demographics in the key names
         which is why in the calculate_GDP method, we can do our each loop on Population.demogaraphics and use population[key + '_income'] or '_tax_rate'.
       </p>
 
@@ -313,7 +317,7 @@
       </pre>
 
       <p>
-        A population's income varies depending on the population's happiness, intellgience, and more. Below is how the Treasury class determines revenue based on taxation of the population.
+        A population's income varies depending on the population's happiness, intellgience, and more. Below is how the TreasuryBalance class determines revenue based on taxation of the population.
       </p>
       
       <pre class="prettyprint land-rb">
@@ -356,11 +360,85 @@
         end
       </pre>
 
+      <p id="military">A simliar methodology is used for calculating the cost to maintain a Military. Military cost is 💵 / unit / turn. Below is the Military class with the units enum defined.</p>
 
-      <h3 class="center" id="war">Multiplayer War!</h3>
+      <pre class="prettyprint land-rb">
+        class Military < ApplicationRecord
+          belongs_to :nation
+          has_one :defense, dependent: :delete
+          has_one :offense, dependent: :delete
+          after_create :generate_defense_offense
+          validate :purchase, on: :update
+        
+          # Military Unit Enums
+          enum units: {
+            spearman: "𐃆 Spearman",
+            bowman: "🏹 Bowman",
+            archer: "🏹 Archer",
+            chariot: "🐎 Chariot",
+            sloop: "⛵️ Sloop",
+            phalanx: "𐃆 Phalanx",
+            cavalry: "🏇 Cavalry",
+            swordsman: "🗡 Swordsman",
+            knight: "🎠 Knight",
+            trebuchet: "☄️ Trebuchet",
+            galleon: "⛵️ Galleon",
+            musketeer: "💨 Musketeer",
+            .
+            .
+            .
+            pandemic: "☣️ Pandemic"
+          }
+        end
+      </pre>
 
-      <p>This section coming soon.</p>
+      <p>Each Military Unit you see above defined in the enum has its own class. The MilitaryUnit::UnitName class defines unit stats such as cost, health points, and attack points.</p>
 
+      <p>
+        In this method '.last' is used to select the last record in the DB. Though this could be handled differently, the reason this method is being used is because MilitaryUnits
+        are another example within the game that is managable within the Admin Dashboard so that military unit stats can be adjusted with the need to write code or deploy the app.
+        If a unit is over powered, and Admin can <a href="https://www.urbandictionary.com/define.php?term=nerf" target="_blank">nerf</a> 
+        its stats and the changes are live in the game immediately. This also goes for any attribute of the unit class, such as the cost.
+      </p>
+
+      <pre class="prettyprint land-rb">
+        class MilitaryManager < ApplicationRecord
+
+          def self.classes
+            return {
+              spearman: MilitaryUnit::Spearman.last,
+              bowman: MilitaryUnit::Bowman.last,
+              phalanx: MilitaryUnit::Phalanx.last,
+              archer: MilitaryUnit::Archer.last,
+              chariot: MilitaryUnit::Chariot.last,
+              sloop: MilitaryUnit::Sloop.last,
+              swordsman: MilitaryUnit::Swordsman.last,
+              knight: MilitaryUnit::Knight.last,
+              musketeer: MilitaryUnit::Musketeer.last,
+              .
+              .
+              .
+              pandemic: MilitaryUnit::Pandemic.last
+            }
+          end
+        end
+      </pre>
+
+      <p>Calculating the cost of all military units the nation has:</p>
+
+      <pre class="prettyprint land-rb">
+        # In the TreasuryBalance.rb
+        
+        def self.military(military)
+          classes = MilitaryManager.classes
+          units = Military.units
+          sum = 0.0
+          units.each do |key, value|
+            sum += (military[key] * classes[key.to_sym].price * 0.25)
+          end
+          return sum.round(2)
+        end
+      </pre>
 
     </div>
   </body>
