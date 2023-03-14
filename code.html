@@ -188,7 +188,6 @@
         <li>I = Private Investment</li>
         <li>NX = Imports - Exports</li>
       </ul>
-
       
       <pre class="prettyprint lang-rb">
         class Economy < ApplicationRecord
@@ -224,11 +223,138 @@
       </pre>
 
       <p>
-        Will post explanation for this soon. As the new Trade Functionality was recently added, enabling nation's to trade resources, money, and influence, the import_exports part of GDP can now be implemented,
-        but is not yet implemented which is why in the code above it is set to 0.
+        Above you can see the import_exports (NX) is set to 0. This is because although the Trade functionality has been launched in the game, there is currently no tracking
+        the value of trades to keep a tally of import and exports. This will be implemented in the near future, so for now it is defaulted to 0.
       </p>
 
+      <pre class="prettyprint lang-rb">
+        class Population < ApplicationRecord
+          belongs_to :nation
+          validate :validate_stats, on: :update
+        
+          enum demographics: {
+            lower_class: "👨🏼‍🌾 Lower Class",
+            middle_class: "👨🏻‍🏭 Middle Class",
+            upper_class: "🤵🏻 Upper Class",
+            colony_class: "🏘 Colony",
+            commercial_class: "🏢 Corporate"
+          }
+        end
+      </pre>
 
+      <p>
+        The Treasury model contains an enum of the different tax brackets. The tax brackets corresponsd to the Population demographics in the key names
+        which is why in the calculate_GDP method, we can do our each loop on Population.demogaraphics and use population[key + '_income'] or '_tax_rate'.
+      </p>
+
+      <pre class="prettyprint lang-rb">
+        class Treasury < ApplicationRecord
+          belongs_to :nation
+          validate :set_taxes, on: :update
+        
+          enum brackets: {
+            lower_class_tax_rate: "👨🏼‍🌾 Lower Class",
+            middle_class_tax_rate: "👨🏻‍🏭 Middle Class",
+            upper_class_tax_rate: "🤵🏻 Upper Class",
+            colony_class_tax_rate: "🏘 Colony",
+            commercial_class_tax_rate: "🏢 Corporate"
+          }
+        end
+      </pre>
+
+      <p>
+        The Budget model has an enum which defines the difference areas of government spending that the user can budget for.
+      </p>
+
+      <pre class="prettyprint lang-rb">
+        class Budget < ApplicationRecord
+          belongs_to :nation
+          validate :verify_purchase, on: :update
+        
+          enum items: {
+            infrastructure: "🛣 Infrastructure",
+            public_service: "👮🏻‍♂️ Public services",
+            education: "🎓 Education",
+            healthcare: "🏥 Healthcare"
+          }
+        end
+      </pre>
+
+      <p>
+        Here is a look at the Population table in the schema.rb to get an idea of what attributes exist.
+      </p>
+
+      <pre class="prettyprint land-rb">
+        create_table "populations", force: :cascade do |t|
+          t.integer "nation_id"
+
+          t.integer "census"
+          t.integer "density"
+          t.float "fertility_rate"
+          t.float "death_rate"
+
+          t.integer "happiness"
+          t.integer "intelligence"
+          t.integer "freedom"
+          t.integer "spirituality"
+
+          t.integer "upper_class"
+          t.integer "middle_class"
+          t.integer "lower_class"
+          t.integer "commercial_class"
+          t.integer "colony_class"
+
+          t.float "upper_class_income"
+          t.float "middle_class_income"
+          t.float "lower_class_income"
+          t.float "commercial_class_income"
+          t.float "colony_class_income"
+        end
+      </pre>
+
+      <p>
+        A population's income varies depending on the population's happiness, intellgience, and more. Below is how the Treasury class determines revenue based on taxation of the population.
+      </p>
+      
+      <pre class="prettyprint land-rb">
+        class TreasuryBalance < ApplicationRecord
+
+          def self.calculate(treasury, population, budget, military)
+            monthly_income = TreasuryBalance.revenue(treasury, population)
+            budget_spending = TreasuryBalance.budget(budget, monthly_income)
+            military_spending = TreasuryBalance.military(military)
+            total_expenses = (budget_spending + military_spending).round(2)
+            update_treasury(treasury, monthly_income, military_spending, total_expenses)
+          end
+          
+          def self.update_treasury(treasury,monthly_income, 
+                                   military_spending, total_expenses)
+            treasury.update!(
+              military_spending: military_spending,
+              monthly_revenue: monthly_income,
+              monthly_expenses: total_expenses,
+              monthly_income: monthly_income - total_expenses,
+              government_cash: [
+                treasury.government_cash + monthly_income - total_expenses, 9999999999999.0
+              ].min
+            )
+          end
+        end
+      </pre>
+
+      <p>Calculating revenue for each population demographic in the TreasuryBalance model.</p>
+
+      <pre class="prettyprint land-rb">
+        def self.revenue(treasury, population)
+          demographics = Population.demographics
+          sum = 0.0
+          demographics.each do |key, value|
+            sum += ((population[key] * population[key + '_income']) *
+            (treasury[key + '_tax_rate'] * 0.01)) / 100
+          end
+          return sum.round(2)
+        end
+      </pre>
 
 
       <h3 class="center" id="war">Multiplayer War!</h3>
