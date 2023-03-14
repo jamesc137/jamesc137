@@ -360,6 +360,21 @@
         end
       </pre>
 
+      
+      <p>This is an example of ChatGPT-4 being used to help me improve some code.</p>
+      <p>Below is a slightly refactoed version of the method above which uses the <u>reduce</u> method to calculate the sum, avoiding the need for an explicit loop and a separate variable to store the sum. </p>
+
+      <pre class="prettyprint land-rb">
+        def self.revenue(treasury, population)
+          demographics = Population.demographics
+          sum = demographics.reduce(0.0) do |acc, (key, _)|
+            acc + ((population[key] * population["#{key}_income"]) *
+                  (treasury["#{key}_tax_rate"] * 0.01)) / 100
+          end
+          sum.round(2)
+        end
+      </pre>
+
       <p id="military">A simliar methodology is used for calculating the cost to maintain a Military. Military cost is 💵 / unit / turn. Below is the Military class with the units enum defined.</p>
 
       <pre class="prettyprint land-rb">
