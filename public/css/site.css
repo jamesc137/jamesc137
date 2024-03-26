@@ -43,6 +43,10 @@ body {
   font-size: 100%;
   overflow-x: hidden;
   scroll-behavior: smooth;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 /* Standard Elements */
 h1 {
@@ -172,4 +176,8 @@ p {
 }
 .barrier.xl {
   padding-top: 125px;
+}
+.legal {
+  text-align: center;
+  padding: 20px 0;
 }
