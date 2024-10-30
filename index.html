@@ -1,84 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>James Calhoun</title>
-    <!-- OGP -->
-    <meta property="og:title" content="James Calhoun - Entrepreneur"/>
-    <meta property="og:description" content="James Calhoun - Entrepreneur"/>
+    <meta property="og:title" content="James Calhoun - Software Engineer"/>
+    <meta property="og:description" content="James Calhoun - Software Engineer"/>
     <meta property="og:url" content="https://jamescalhoun.co" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Fav Icon -->
+    <meta name="keywords" content="James Calhoun, Software Engineer, BitNations, Coinbot, Cyber Security, AI">
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-    <!-- Site CSS -->
     <link href="public/css/site.css" rel="stylesheet" type="text/css">
-    <link href="public/css/components.css" rel="stylesheet" type="text/css">
-    <link href="public/css/gradients.css" rel="stylesheet" type="text/css">
-    <link href="public/css/animations.css" rel="stylesheet" type="text/css">
-    <link href="public/css/lavalamp.css" rel="stylesheet" type="text/css">
-    <!-- JS -->
-    <script type="text/javascript" src="public/js/jquery.min.js"></script>
-    <script type="text/javascript" src="public/js/site.js"></script>
-    <script type="text/javascript" src="public/js/lavalamp.js"></script>
   </head>
   <body>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GK8JKRHBQV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-GK8JKRHBQV');
-    </script>
-    
+
     <div class="container">
+      <!-- Header -->
+      <header class="center">
+        <h1>James Calhoun <br /> Software Engineer</h1>
+      </header>
       
-      <!-- Intro -->
-      <h1 class="center">James Calhoun</h1>
+      <!-- BitNations Section -->
+      <h2>🏙️ BitNations</h2>
+      <p>BitNations is a minimalist nation simulation game that was never officially launched but gained surprising popularity organically within a year of its existence. Initially discovered by users, the game quickly found its way into schools in Sweden, where it was utilized as a learning tool for Model UN. This grassroots interest led to its spread through a network of educational institutions in Sweden and across the U.K. and Europe.</p>
+      <p>As students began to engage with the game outside of class, its popularity continued to grow. BitNations eventually expanded beyond Europe, reaching Asia, Australia, California, and now, the globe.</p>
 
-      <!-- BitNations -->
-      <h1>🏙️ BitNations</h1>
-      <p>
-        This is a nation simulation game I dreamt of making as a kid and one day
-        decided to build it for fun. I threw it up online and forgot about it.
-        A year later it grew organically to twenty thousand users. I continue
-        to develop the game in my free time.
-      </p>
+      <div class="btn-container">
+        <a href="https://bitnations.co" target="_blank" class="btn">Explore BitNations →</a>
+      </div>
 
-      <a href="https://bitnations.co" target="_blank">
-        <div class="btn blue">BitNations →</div>
-      </a>
-
-      <div class="barrier lg"></div>
-      
-
-      <!-- Coinbot -->
-      <h1>🤖 Coinbot</h1>
-      <p>Cross-platform chat interface that provides
-        users with realtime fiat and crypto currency prices. I built
-        Coinbot in 2017 as a tool for myself and some friends.
-      </p>
-      <p>
-        It blew up overnight and grew to over a million users 
-        worldwide. We profited by utilizing backend data to 
-        predict alt-coin pumps before they happened with >99% accuracy.
-      </p>
-      <p>
-        This project was fun while it lasted, but eventually I shut it down.
-      </p>
-
-      <a href="https://www.youtube.com/embed/4eSnTCbNZhA" target="_blank">
-        <div class="btn blue">BlockCon →</div>
-      </a>
-
-
-      
+      <!-- Coinbot Section -->
+      <h2>🤖 Coinbot</h2>
+      <p>Coinbot is a cross-platform chat interface delivering real-time fiat and cryptocurrency prices to users. Originally created in 2017 as a resource for crypto enthusiasts, it quickly gained popularity.</p>
+      <p>Within a short time, Coinbot reached over a million users worldwide. By leveraging backend data insights, we achieved predictive accuracy of over 99% for upcoming altcoin surges, driving substantial profitability.</p>
     </div>
+
+    <footer class="legal center">
+      James Calhoun © <span id="year"></span>. All Rights Reserved.
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
-
-  <!-- Legal -->
-  <div class="legal center f-gray">
-    James Calhoun © 2024. All Rights Reserved.
-  </div>
-
-  </html>
+</html>
