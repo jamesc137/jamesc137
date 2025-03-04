@@ -64,6 +64,7 @@ p {
 
 .bold {
   font-weight: bold;
+  text-decoration: none;
   color: var(--text-color);
 }
 
